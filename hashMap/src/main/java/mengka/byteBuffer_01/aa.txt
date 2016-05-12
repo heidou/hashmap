@@ -1,0 +1,7 @@
+在Java中当我们要对数据进行更底层的操作时，通常是操作数据的字节（byte）形式，这时常常会用到ByteBuffer这样一个类。ByteBuffer提供了两种静态实例方式：
+public static ByteBuffer allocate(int capacity)  
+public static ByteBuffer allocateDirect(int capacity) 
+为什么要提供两种方式呢？这与Java的内存使用机制有关。第一种分配方式产生的内存开销是在JVM中的，而第二种的分配方式产生的开销在JVM之外，以就是系统级的内存分配。当Java程序接收到外部传来的数据时，首先是被系统内存所获取，然后在由系统内存复制拷贝到JVM内存中供Java程序使用。所以在第二种分配方式中，可以省去复制这一步操作，效率上会有所提高。但是系统级内存的分配比起JVM内存的分配要耗时得多，所以并不是任何时候allocateDirect的操作效率都是最高的。下面是一个不同容量情况下两种分配方式的操作时间对比： 
+ByteBuffer的allocate和allocateDirect区别
+由图可以看出，当操作数据量很小时，两种分配方式操作使用时间基本是相同的，第一种方式有时可能会更快，但是当数据量很大时，第二种方式会远远大于第一种的分配方式。
+http://blog.sina.com.cn/s/blog_67dc11000101cpsk.html
